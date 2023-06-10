@@ -27,6 +27,7 @@ async function run() {
     await client.connect();
 
     const classCollection = client.db("windbagDb").collection("classes");
+    const courseCollection = client.db("windbagDb").collection("courses");
 
     app.get('/classes', async(req, res) =>{
         const result = await classCollection.find().toArray();
