@@ -35,10 +35,22 @@ async function run() {
     })
 
     // course collection
+
+
+    app.get('/courses', async(req, res)=>{
+      const email = req.query.email;
+      if(!email){
+        res.send([]);
+      }
+      const query = {email: email};
+      const result = await courseCollection.find(query).toArray();
+      res.send(result);
+    })
+
     app.post('/courses', async(req, res) =>{
-      const element = req.body;
-      console.log(element);
-      const result = await courseCollection.insertOne(element);
+      const item = req.body;
+      console.log(item);
+      const result = await courseCollection.insertOne(item);
       res.send(result);
     })
 
@@ -63,3 +75,10 @@ app.get('/', (req, res) => {
 app.listen(port, () =>{
     console.log(`windbag prime academy is running on port ${port}`);
 })
+
+
+
+// const decodedEmail = req.decoded.email;
+// if(email !== decodedEmail){
+//   return res.status(403).send({ error: true, message: 'forbidden access'})
+// }
