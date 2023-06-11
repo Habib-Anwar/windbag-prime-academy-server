@@ -26,6 +26,7 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
 
+    const usersCollection = client.db("windbagDb").collection("users");
     const classCollection = client.db("windbagDb").collection("classes");
     const courseCollection = client.db("windbagDb").collection("courses");
 
