@@ -30,6 +30,14 @@ async function run() {
     const classCollection = client.db("windbagDb").collection("classes");
     const courseCollection = client.db("windbagDb").collection("courses");
 
+    // user collection
+
+    app.post('/users', async(req, res) =>{
+      const user = req.body;
+      const result = await usersCollection.insertOne(user);
+      res.send(result);
+    })
+
     app.get('/classes', async(req, res) =>{
         const result = await classCollection.find().toArray();
         res.send(result);
