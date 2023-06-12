@@ -47,6 +47,7 @@ async function run() {
     const usersCollection = client.db("windbagDb").collection("users");
     const classCollection = client.db("windbagDb").collection("classes");
     const courseCollection = client.db("windbagDb").collection("courses");
+    const categoryCollection = client.db("windbagDb").collection("categories");
 
 
     app.post('/jwt', (req, res) => {
@@ -56,9 +57,19 @@ async function run() {
       res.send({ token })
     })
 
+    const verifyAdmin = async(req, res, next) =>{
+      const email = req.decoded.email;
+      const query = {email: email}
+      const user = await usersCollection.findOne(query);
+      if(user?.role !== 'admin'){
+        return res.status(403).send({error: true, message: 'forbidden message'});
+      }
+      next();
+    }
+
     // user collection
 
-    app.get('/users', async (req, res) => {
+    app.get('/users', verifyJWT, verifyAdmin, async (req, res) => {
       const result = await usersCollection.find().toArray();
       res.send(result);
     })
@@ -161,6 +172,13 @@ async function run() {
       const query = { _id: new ObjectId(id) };
       const result = await courseCollection.deleteOne(query);
       res.send(result);
+    })
+
+        app.post('/categories', async(req, res) =>{
+        const adding = req.body;
+        console.log(adding);
+        const result = await categoryCollection.insertOne(adding);
+        res.send(result);
     })
 
 
